@@ -1,0 +1,42 @@
+# Install required packages if needed
+install.packages(c("dplyr", "ggplot2"))
+
+# Load libraries
+library(dplyr)
+library(ggplot2)
+
+# Step 1: Load dataset and inspect
+data("mtcars")
+head(mtcars)
+
+# Step 2: Select columns
+mtcars_selected <- mtcars[, c("mpg", "cyl", "hp")]
+head(mtcars_selected)
+
+# Step 3: Filter rows
+mtcars_filtered <- mtcars[mtcars$mpg > 20, ]
+head(mtcars_filtered)
+
+# Using dplyr for chained operations
+mtcars_clean <- mtcars %>%
+  filter(mpg > 20, cyl == 4) %>%
+  select(mpg, hp, wt)
+mtcars_clean
+
+# Step 4: Simulate & handle missing data
+mtcars_with_na <- mtcars
+mtcars_with_na[1:3, "mpg"] <- NA
+head(mtcars_with_na)
+cleaned_data <- na.omit(mtcars_with_na)
+head(cleaned_data)
+
+# Step 5: Visualizations
+plot(mtcars$mpg, mtcars$hp, main="MPG vs Horsepower", xlab="MPG", ylab="Horsepower", col="blue", pch=19)
+hist(mtcars$mpg, main="Histogram of MPG", col="skyblue", xlab="MPG")
+boxplot(mpg ~ cyl, data=mtcars, col="lightgreen", main="MPG by Cylinder")
+barplot(table(mtcars$cyl), main="Cylinder Counts", col="orange", xlab="Cylinders")
+
+ggplot(mtcars, aes(x=wt, y=mpg, color=factor(cyl))) +
+  geom_point(size=3) +
+  labs(title="MPG vs Weight by Cylinder", x="Weight", y="MPG") +
+  theme_minimal()
