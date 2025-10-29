@@ -1,0 +1,35 @@
+# Install libraries
+!pip install pandas matplotlib seaborn --quiet
+
+# Import libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset
+url = "https://raw.githubusercontent.com/plotly/datasets/master/winequality-red.csv"
+df = pd.read_csv(url)
+
+# Basic info
+print(df.info())
+print(df.describe())
+print(df.isnull().sum())
+
+# Univariate analysis
+sns.countplot(x='quality', data=df, palette='viridis')
+plt.title('Wine Quality Distribution')
+plt.show()
+
+# Bivariate analysis
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+
+sns.scatterplot(x='alcohol', y='quality', data=df, color='purple')
+plt.title('Alcohol vs Quality')
+plt.show()
+
+# Boxplot for outliers
+sns.boxplot(data=df, orient='h', palette='Set2')
+plt.title('Boxplot for All Features')
+plt.show()
