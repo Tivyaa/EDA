@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load dataset
+df = pd.read_csv("/content/email_data.csv", low_memory=False)
+
+# Rename main columns
+rename = {c: 'Date' if 'date' in c.lower() else
+           'Sender' if 'from' in c.lower() or 'sender' in c.lower() else
+           'Receiver' if 'to' in c.lower() or 'receiver' in c.lower() else
+           'Body' if 'body' in c.lower() else
+           'Has Attachments' if 'attach' in c.lower() else c for c in df.columns}
+df = df.rename(columns=rename)
+
+# Preprocess
+df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+df['Day'] = df['Date'].dt.day_name()
+df['Hour'] = df['Date'].dt.hour
+df['BodyLength'] = df['Body'].astype(str).str.len()
+df['Has Attachments'] = df['Has Attachments'].astype(str).str.lower().isin(['true','1','yes','y','t'])
+
+# Insights
+print("Rows:", len(df))
+print("Top Senders:\n", df['Sender'].value_counts().head(5))
+print("Avg Body Length:", round(df['BodyLength'].mean(),1))
+print("Attachments %:", round(df['Has Attachments'].mean()*100,1))
+
+# Visualizations
+order = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+df['Day'].value_counts().reindex(order).plot.bar(title='Emails by Day')
+plt.show()
+df['Hour'].dropna().astype(int).plot.hist(bins=24, title='Emails by Hour')
+plt.show()
+df['Has Attachments'].value_counts().plot.bar(title='Attachment Distribution')
+plt.show()
