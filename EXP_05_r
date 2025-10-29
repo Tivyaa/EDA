@@ -1,0 +1,30 @@
+# Install missing libraries (only run once)
+install.packages(c("forecast", "ggplot2", "tseries"))
+
+# Load required libraries
+library(ggplot2)
+library(forecast)
+library(tseries)
+
+# Step 1: Create time series data
+ts_data <- ts(c(29,30,31,32,34,36,35,33,30,28,27,29,
+                31,32,34,36,38,39,37,35,33,30,28,30),
+              start = c(2020,1), frequency = 12)
+
+# Step 2: Plot the time series
+plot.ts(ts_data, main = "Monthly Temperature", ylab = "Temperature", col = "blue")
+
+# Step 3: Decompose time series
+decomp <- decompose(ts_data)
+plot(decomp)
+
+# Step 4: Seasonal plot
+seasonplot(ts_data, col = rainbow(12), year.labels = TRUE, main = "Seasonal Plot")
+
+# Step 5: Boxplot by month
+month <- cycle(ts_data)
+boxplot(ts_data ~ month,
+        main = "Month-wise Boxplot",
+        xlab = "Month",
+        ylab = "Temperature",
+        col = "lightblue")
