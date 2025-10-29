@@ -1,0 +1,24 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load dataset
+url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+df = pd.read_csv(url)
+
+# Clean data
+df.drop(['Cabin'], axis=1, inplace=True)
+df['Age'].fillna(df['Age'].median(), inplace=True)
+df['Embarked'].fillna(df['Embarked'].mode()[0], inplace=True)
+
+# Univariate
+sns.countplot(x='Survived', data=df); plt.title('Survival Count'); plt.show()
+sns.histplot(df['Age'], bins=30, kde=True); plt.title('Age Distribution'); plt.show()
+
+# Bivariate
+sns.barplot(x='Sex', y='Survived', data=df); plt.title('Survival by Gender'); plt.show()
+sns.boxplot(x='Pclass', y='Age', data=df); plt.title('Age by Class'); plt.show()
+
+# Correlation
+sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm')
+plt.title('Feature Correlation'); plt.show()
