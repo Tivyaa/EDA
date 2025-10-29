@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 # Load dataset
 df = pd.read_csv("/content/email_data.csv", low_memory=False)
+#use 'email_data' dataset from github 
 
 # Rename main columns
 rename = {c: 'Date' if 'date' in c.lower() else
